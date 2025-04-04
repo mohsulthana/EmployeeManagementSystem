@@ -12,6 +12,17 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ user, className }: UserAvatarProps) {
+  // Add null check to handle undefined or null user object
+  if (!user || !user.fullName) {
+    return (
+      <Avatar className={cn("bg-gray-200", className)}>
+        <AvatarFallback className="text-gray-500">
+          NA
+        </AvatarFallback>
+      </Avatar>
+    );
+  }
+  
   const initials = user.fullName
     .split(" ")
     .map((n) => n[0])
