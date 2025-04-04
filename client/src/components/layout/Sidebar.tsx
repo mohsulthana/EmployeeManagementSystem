@@ -62,7 +62,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <h1 className="text-xl font-bold text-primary flex items-center">
           <span className="material-icons mr-2">people</span>
-          EmployeeHub
+          Employee Hub
         </h1>
         {isMobile && (
           <Button variant="ghost" size="icon" onClick={onToggle}>
@@ -91,10 +91,13 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   <div
                     className={cn(
                       "flex items-center py-3 px-4 rounded-md text-gray-700 hover:bg-gray-100",
-                      location === item.href && "bg-primary border-l-3 border-primary text-white"
+                      location === item.href &&
+                        "bg-primary bg-opacity-10 border-l-3 border-primary text-white",
                     )}
                   >
-                    <span className="material-icons mr-3 text-current">{item.icon}</span>
+                    <span className="material-icons mr-3 text-current">
+                      {item.icon}
+                    </span>
                     {!collapsed && item.title}
                   </div>
                 </Link>
