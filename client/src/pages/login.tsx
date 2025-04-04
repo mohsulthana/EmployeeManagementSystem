@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "wouter";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -12,6 +13,19 @@ export default function Login() {
   const [error, setError] = useState("");
   const { login } = useAuth();
   const [, navigate] = useLocation();
+
+  // Setup login mutation
+  const loginMutation = useMutation({
+    mutationFn: async (credentials: { username: string; password: string }) => {
+      await login(credentials);
+    },
+    onSuccess: () => {
+      navigate("/");
+    },
+    onError: () => {
+      setError("Invalid username or password");
+    }
+  });
 
   // Demo credentials
   const demoUsers = [
@@ -22,24 +36,13 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    try {
-      setError("");
-      await login({ username, password });
-      navigate("/");
-    } catch (err) {
-      setError("Invalid username or password");
-    }
+    setError("");
+    loginMutation.mutate({ username, password });
   };
 
   const loginAsDemoUser = async (username: string, password: string) => {
-    try {
-      setError("");
-      await login({ username, password });
-      navigate("/");
-    } catch (err) {
-      setError("Failed to login with demo account");
-    }
+    setError("");
+    loginMutation.mutate({ username, password });
   };
 
   return (
@@ -85,8 +88,15 @@ export default function Login() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Sign In
+              <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
+                {loginMutation.isPending ? (
+                  <span className="flex items-center">
+                    <span className="animate-spin h-4 w-4 mr-2 border-b-2 border-white rounded-full"></span>
+                    Signing In...
+                  </span>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
             </div>
           </form>
@@ -100,8 +110,13 @@ export default function Login() {
                 variant="outline"
                 className="text-xs"
                 onClick={() => loginAsDemoUser(user.username, user.password)}
+                disabled={loginMutation.isPending}
               >
-                Login as {user.role}
+                {loginMutation.isPending ? 
+                  <span className="flex items-center justify-center">
+                    <span className="animate-spin h-3 w-3 mr-1 border-b-2 border-primary rounded-full"></span>
+                  </span> 
+                : `Login as ${user.role}`}
               </Button>
             ))}
           </div>
