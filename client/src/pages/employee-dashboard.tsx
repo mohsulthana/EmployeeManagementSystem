@@ -36,7 +36,7 @@ export default function EmployeeDashboard() {
     <Layout>
       <div>
         <h2 className="text-lg font-medium mb-4">
-          Welcome Back, {currentUser?.fullName.split(' ')[0] || 'User'}!
+          Welcome Back, {currentUser?.fullName ? currentUser.fullName.split(' ')[0] : 'User'}!
         </h2>
         
         {/* Info Cards */}
