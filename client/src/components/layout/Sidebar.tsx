@@ -91,7 +91,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   <div
                     className={cn(
                       "flex items-center py-3 px-4 rounded-md text-gray-700 hover:bg-gray-100",
-                      location === item.href && "bg-primary bg-opacity-10 border-l-3 border-primary text-primary"
+                      location === item.href && "bg-primary border-l-3 border-primary text-white"
                     )}
                   >
                     <span className="material-icons mr-3 text-current">{item.icon}</span>
